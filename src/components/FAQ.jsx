@@ -4,6 +4,7 @@ import { useState } from "react";
 import { faqs } from "@/data/content";
 
 export default function FAQ() {
+  // null means all FAQs are closed initially
   const [openIndex, setOpenIndex] = useState(null);
 
   const toggle = (i) => {
@@ -17,12 +18,12 @@ export default function FAQ() {
         <h2 className="section-title">Questions Families Often Ask</h2>
       </div>
 
-      <div className="faq-grid">
+      <div className="faq-grid mobile-carousel">
         {faqs.map((faq, i) => {
           const isOpen = openIndex === i;
 
           return (
-            <div
+            <article
               key={faq.q}
               className={`faq-item ${isOpen ? "open" : ""}`}
               onClick={() => toggle(i)}
@@ -44,7 +45,7 @@ export default function FAQ() {
               </div>
 
               <p className="faq-a">{faq.a}</p>
-            </div>
+            </article>
           );
         })}
       </div>
