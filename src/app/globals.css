@@ -1791,3 +1791,31 @@ footer a:hover {
     text-align: left;
   }
 }
+/* Footer mobile layout: Clinic and Support side by side */
+@media (max-width: 600px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem 1.5rem;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+
+  .footer-column:nth-of-type(1) {
+    grid-column: 1 / -1;
+  }
+
+  .footer-column:nth-of-type(2),
+  .footer-column:nth-of-type(3) {
+    grid-column: auto;
+  }
+
+  .footer-column h4 {
+    font-size: 1rem;
+  }
+
+  .footer-column a {
+    font-size: 0.86rem;
+  }
+}
