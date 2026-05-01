@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Hero() {
   return (
     <section className="hero">
@@ -38,34 +40,13 @@ export default function Hero() {
 
       <div className="hero-visual fade-up delay-2">
         <div className="hero-img-frame">
-          <div className="hero-img-placeholder">
-            <svg
-              viewBox="0 0 80 80"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle
-                cx="40"
-                cy="28"
-                r="14"
-                fill="rgba(78,122,84,0.3)"
-              />
-              <path
-                d="M16 68c0-13.255 10.745-24 24-24s24 10.745 24 24"
-                stroke="rgba(78,122,84,0.5)"
-                strokeWidth="3"
-                strokeLinecap="round"
-              />
-              <circle
-                cx="60"
-                cy="20"
-                r="8"
-                fill="rgba(196,113,74,0.2)"
-              />
-            </svg>
-
-            <p>Family care illustration</p>
-          </div>
+          <Image
+            src="/hero-family-care.jpg"
+            alt="Doctor consulting a parent and child in a calm clinic room"
+            fill
+            priority
+            className="hero-image"
+          />
         </div>
 
         <div className="hero-card">
