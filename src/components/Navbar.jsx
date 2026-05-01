@@ -2,7 +2,15 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <a href="#" className="nav-logo">
-        Vithara <span>Care</span>
+        <img
+          src="/vithara-logo.png"
+          alt="Vithara Care Clinic logo"
+          className="nav-logo-img"
+        />
+
+        <span className="nav-logo-text">
+          Vithara <span>Care</span>
+        </span>
       </a>
 
       <ul className="nav-links">
