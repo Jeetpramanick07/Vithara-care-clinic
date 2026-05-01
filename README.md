@@ -1,57 +1,41 @@
-# Vithara Care Clinic
+# Vithara Care Clinic Landing Page
 
-> **"Care That Remembers Every Generation"**
+A mobile-first, production-ready landing page for **Vithara Care Clinic**, a modern family healthcare clinic focused on compassionate, accessible, and trustworthy care for every generation.
 
-A warm, family-centered healthcare landing page built with Next.js 15.
+## Live Demo
 
-## Tech Stack
+**Live Site:** https://vithara-care-clinic.vercel.app/
 
-- **Framework:** Next.js 15 (App Router)
-- **Library:** React 19
-- **Styling:** Global CSS (`src/app/globals.css`)
-- **Fonts:** Google Fonts via `next/font/google`
-- **Icons:** Emoji
-- **Deployment:** Vercel
+## GitHub Repository
 
-## Getting Started
+**Repository:** https://github.com/Jeetpramanick07/Vithara-care-clinic
 
-```bash
-npm install
-npm run dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+## Project Overview
 
-## Project Structure
+Vithara Care Clinic is designed as a warm and reassuring healthcare landing page for families, working professionals, parents, children, and elderly patients.
 
-```
-vithara-care-clinic/
-├── public/images/
-├── src/
-│   ├── app/
-│   │   ├── globals.css
-│   │   ├── layout.jsx
-│   │   └── page.jsx
-│   ├── components/
-│   │   ├── Navbar.jsx
-│   │   ├── Hero.jsx
-│   │   ├── Problem.jsx
-│   │   ├── Solution.jsx
-│   │   ├── Generations.jsx
-│   │   ├── Benefits.jsx
-│   │   ├── Promise.jsx
-│   │   ├── WhyChoose.jsx
-│   │   ├── Testimonials.jsx
-│   │   ├── HowItWorks.jsx
-│   │   ├── FAQ.jsx
-│   │   ├── CTA.jsx
-│   │   ├── Footer.jsx
-│   │   └── StickyCTA.jsx
-│   └── data/
-│       └── content.js
-└── package.json
-```
+The project follows the concept:
 
-## Deploy on Vercel
+> **Care That Remembers Every Generation**
 
-Push to GitHub, then import the repo in [Vercel](https://vercel.com). Zero configuration needed.
+Instead of presenting the clinic as a generic healthcare website, the landing page focuses on emotional trust, family comfort, preventive healthcare, and a calm patient experience.
+
+---
+
+## Key Objective
+
+The objective of this project is to build a mobile-first clinic landing page that feels:
+
+- Warm
+- Calm
+- Trustworthy
+- Professional
+- Human-centered
+- Easy to use
+
+The page is designed to guide users through a clear journey:
+
+```txt
+Patient Concerns → Vithara's Care Approach → Trust Building → Appointment Booking
