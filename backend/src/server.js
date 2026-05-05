@@ -23,13 +23,16 @@ connectDB();
 /* =========================
    CORS
    Allows:
-   - local frontend
+   - localhost:3000
+   - localhost:3001
+   - any localhost frontend port
    - deployed Vercel frontend
-   - Render FRONTEND_URL env
+   - FRONTEND_URL from Render env
 ========================= */
 
 const allowedOrigins = [
   "http://localhost:3000",
+  "http://localhost:3001",
   "https://vithara-care-clinic.vercel.app",
   process.env.FRONTEND_URL,
 ].filter(Boolean);
@@ -37,12 +40,18 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests from Postman, browser direct visits, server-to-server calls
+      // Allows Postman, browser direct URL visits, and server-to-server calls
       if (!origin) {
         return callback(null, true);
       }
 
+      // Allow listed origins
       if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // Allow any localhost port during development
+      if (/^http:\/\/localhost:\d+$/.test(origin)) {
         return callback(null, true);
       }
 
