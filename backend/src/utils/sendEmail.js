@@ -22,17 +22,24 @@ const createTransporter = () => {
   const { gmailUser, gmailAppPassword } = getMailConfig();
 
   return nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
       user: gmailUser,
       pass: gmailAppPassword,
     },
+    connectionTimeout: 30000,
+    greetingTimeout: 30000,
+    socketTimeout: 30000,
   });
 };
 
 export const sendAdminAppointmentEmail = async (appointment) => {
   const transporter = createTransporter();
   const { gmailUser, adminEmail } = getMailConfig();
+
+  console.log("Sending admin email to:", adminEmail);
 
   const {
     fullName,
@@ -46,7 +53,7 @@ export const sendAdminAppointmentEmail = async (appointment) => {
     intent,
   } = appointment;
 
-  return transporter.sendMail({
+  const info = await transporter.sendMail({
     from: `"Vithara Care Clinic" <${gmailUser}>`,
     to: adminEmail,
     replyTo: email,
@@ -78,18 +85,13 @@ export const sendAdminAppointmentEmail = async (appointment) => {
               )
               .join("")}
           </table>
-
-          <p style="margin-top:24px;color:#555;">
-            Please log in to the admin dashboard to update the appointment status.
-          </p>
-
-          <p style="color:#888;font-size:12px;margin-top:32px;">
-            Vithara Care Clinic · ${gmailUser}
-          </p>
         </div>
       </div>
     `,
   });
+
+  console.log("Admin email sent:", info.messageId);
+  return info;
 };
 
 export const sendPatientConfirmationEmail = async (appointment) => {
@@ -98,7 +100,9 @@ export const sendPatientConfirmationEmail = async (appointment) => {
 
   const { fullName, email, service, preferredDate, preferredTime } = appointment;
 
-  return transporter.sendMail({
+  console.log("Sending patient email to:", email);
+
+  const info = await transporter.sendMail({
     from: `"Vithara Care Clinic" <${gmailUser}>`,
     to: email,
     replyTo: adminEmail,
@@ -119,10 +123,6 @@ export const sendPatientConfirmationEmail = async (appointment) => {
             <p style="margin:0;"><strong>Preferred Time:</strong> ${preferredTime}</p>
           </div>
 
-          <p style="color:#555;">
-            At Vithara Care Clinic, we believe healthcare should feel calm, personal, and reassuring.
-          </p>
-
           <p style="margin-top:28px;color:#555;">
             Warm regards,<br/>
             <strong>Vithara Care Clinic Team</strong><br/>
@@ -132,4 +132,7 @@ export const sendPatientConfirmationEmail = async (appointment) => {
       </div>
     `,
   });
+
+  console.log("Patient email sent:", info.messageId);
+  return info;
 };
