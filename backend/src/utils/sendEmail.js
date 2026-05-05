@@ -1,31 +1,38 @@
 import nodemailer from "nodemailer";
 
-console.log("GMAIL_USER:", process.env.GMAIL_USER);
-console.log("APP_PASSWORD_LENGTH:", process.env.GMAIL_APP_PASSWORD?.length);
+const requiredEnv = (name) => {
+  const value = process.env[name];
+
+  if (!value || !value.trim()) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+
+  return value.trim();
+};
+
+const getMailConfig = () => {
+  const gmailUser = requiredEnv("GMAIL_USER");
+  const gmailAppPassword = requiredEnv("GMAIL_APP_PASSWORD").replace(/\s/g, "");
+  const adminEmail = requiredEnv("ADMIN_EMAIL");
+
+  return { gmailUser, gmailAppPassword, adminEmail };
+};
 
 const createTransporter = () => {
+  const { gmailUser, gmailAppPassword } = getMailConfig();
+
   return nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
+    service: "gmail",
     auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_APP_PASSWORD,
-    },
-    connectionTimeout: 20000,
-    greetingTimeout: 20000,
-    socketTimeout: 20000,
-    tls: {
-      rejectUnauthorized: false,
+      user: gmailUser,
+      pass: gmailAppPassword,
     },
   });
 };
 
-/**
- * Send appointment notification to clinic admin.
- */
 export const sendAdminAppointmentEmail = async (appointment) => {
   const transporter = createTransporter();
+  const { gmailUser, adminEmail } = getMailConfig();
 
   const {
     fullName,
@@ -39,9 +46,9 @@ export const sendAdminAppointmentEmail = async (appointment) => {
     intent,
   } = appointment;
 
-  await transporter.sendMail({
-    from: `"Vithara Care Clinic" <${process.env.GMAIL_USER}>`,
-    to: process.env.ADMIN_EMAIL,
+  return transporter.sendMail({
+    from: `"Vithara Care Clinic" <${gmailUser}>`,
+    to: adminEmail,
     replyTo: email,
     subject: `New Appointment Request — ${fullName}`,
     html: `
@@ -75,26 +82,26 @@ export const sendAdminAppointmentEmail = async (appointment) => {
           <p style="margin-top:24px;color:#555;">
             Please log in to the admin dashboard to update the appointment status.
           </p>
-          <p style="color:#888;font-size:12px;margin-top:32px;">Vithara Care Clinic · ${process.env.GMAIL_USER}</p>
+
+          <p style="color:#888;font-size:12px;margin-top:32px;">
+            Vithara Care Clinic · ${gmailUser}
+          </p>
         </div>
       </div>
     `,
   });
 };
 
-/**
- * Send thank-you confirmation email to the patient.
- */
 export const sendPatientConfirmationEmail = async (appointment) => {
   const transporter = createTransporter();
+  const { gmailUser, adminEmail } = getMailConfig();
 
-  const { fullName, email, service, preferredDate, preferredTime } =
-    appointment;
+  const { fullName, email, service, preferredDate, preferredTime } = appointment;
 
-  await transporter.sendMail({
-    from: `"Vithara Care Clinic" <${process.env.GMAIL_USER}>`,
+  return transporter.sendMail({
+    from: `"Vithara Care Clinic" <${gmailUser}>`,
     to: email,
-    replyTo: process.env.ADMIN_EMAIL,
+    replyTo: adminEmail,
     subject: "Thank You for Booking with Vithara Care Clinic",
     html: `
       <div style="font-family:Arial,sans-serif;background:#faf7f2;padding:24px;">
@@ -119,7 +126,7 @@ export const sendPatientConfirmationEmail = async (appointment) => {
           <p style="margin-top:28px;color:#555;">
             Warm regards,<br/>
             <strong>Vithara Care Clinic Team</strong><br/>
-            <a href="mailto:${process.env.GMAIL_USER}" style="color:#4E7A54;">${process.env.GMAIL_USER}</a>
+            <a href="mailto:${gmailUser}" style="color:#4E7A54;">${gmailUser}</a>
           </p>
         </div>
       </div>
