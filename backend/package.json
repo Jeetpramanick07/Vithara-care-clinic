@@ -4,6 +4,9 @@
   "description": "Express + MongoDB backend for Vithara Care Clinic",
   "main": "src/server.js",
   "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
