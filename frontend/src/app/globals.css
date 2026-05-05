@@ -1819,3 +1819,1010 @@ footer a:hover {
     font-size: 0.86rem;
   }
 }
+/* =========================
+   ADMIN LOGIN PAGE
+========================= */
+
+.admin-login-page {
+  min-height: 100vh;
+  background: var(--ivory);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 5%;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-login-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/vithara-logo.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: min(520px, 75vw);
+  opacity: 0.025;
+  pointer-events: none;
+}
+
+.admin-login-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--white);
+  border-radius: 28px;
+  padding: 2.4rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(122, 158, 126, 0.16);
+  position: relative;
+  z-index: 2;
+}
+
+.admin-login-brand {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.admin-login-logo {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 1rem;
+}
+
+.admin-login-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--sage-dark);
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.admin-login-brand h1 {
+  font-family: var(--font-cormorant), "Cormorant Garamond", serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--charcoal);
+  line-height: 1.15;
+  margin-bottom: 0.65rem;
+}
+
+.admin-login-subtitle {
+  font-size: 0.92rem;
+  color: var(--charcoal-soft);
+  line-height: 1.6;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.admin-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.admin-form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--charcoal);
+}
+
+.admin-form-group input {
+  width: 100%;
+  border: 1px solid rgba(44, 44, 44, 0.15);
+  border-radius: 14px;
+  padding: 0.9rem 1rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--charcoal);
+  background: var(--white);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.admin-form-group input:focus {
+  border-color: var(--sage);
+  box-shadow: 0 0 0 4px rgba(122, 158, 126, 0.12);
+}
+
+.admin-login-button {
+  margin-top: 0.6rem;
+  width: 100%;
+  border: none;
+  border-radius: 40px;
+  padding: 0.9rem 1.4rem;
+  background: var(--terracotta);
+  color: var(--white);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.admin-login-button:hover {
+  background: var(--terracotta-light);
+  transform: translateY(-1px);
+}
+
+.admin-login-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.admin-login-error {
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  background: rgba(196, 113, 74, 0.12);
+  color: var(--terracotta);
+  font-size: 0.85rem;
+}
+
+.admin-login-note {
+  margin-top: 1.4rem;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+@media (max-width: 600px) {
+  .admin-login-page {
+    padding: 5rem 5% 3rem;
+    align-items: flex-start;
+  }
+
+  .admin-login-card {
+    padding: 1.6rem;
+    border-radius: 22px;
+  }
+
+  .admin-login-logo {
+    width: 70px;
+    height: 70px;
+  }
+
+  .admin-login-brand h1 {
+    font-size: 1.55rem;
+  }
+
+  .admin-login-subtitle {
+    font-size: 0.86rem;
+  }
+}
+/* =========================
+   ADMIN DASHBOARD LAYOUT
+========================= */
+
+.admin-layout {
+  min-height: 100vh;
+  background: var(--ivory);
+  display: grid;
+  grid-template-columns: 260px 1fr;
+}
+
+.admin-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  background: #2f2114;
+  color: white;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+}
+
+.admin-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  margin-bottom: 1.4rem;
+}
+
+.admin-sidebar-logo {
+  width: 48px !important;
+  height: 48px !important;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: block;
+}
+
+.admin-sidebar-brand h2 {
+  font-family: var(--font-cormorant), "Cormorant Garamond", serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1;
+  color: white;
+}
+
+.admin-sidebar-brand p {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.65);
+  margin-top: 0.25rem;
+}
+
+.admin-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.admin-sidebar-nav a {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.82);
+  padding: 0.8rem 0.9rem;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.admin-sidebar-nav a:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.admin-logout-btn {
+  margin-top: auto;
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  background: var(--terracotta);
+  color: white;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-logout-btn:hover {
+  background: var(--terracotta-light);
+}
+
+.admin-main {
+  padding: 2rem;
+  min-width: 0;
+}
+
+.admin-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.admin-page-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--sage-dark);
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.admin-page-title {
+  font-family: var(--font-cormorant), "Cormorant Garamond", serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--charcoal);
+  line-height: 1.1;
+}
+
+.admin-page-subtitle {
+  margin-top: 0.5rem;
+  color: var(--charcoal-soft);
+  font-size: 0.95rem;
+}
+
+.admin-primary-btn {
+  background: var(--terracotta);
+  color: white;
+  border: none;
+  text-decoration: none;
+  border-radius: 40px;
+  padding: 0.8rem 1.35rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.admin-primary-btn:hover {
+  background: var(--terracotta-light);
+}
+
+.admin-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.admin-stat-card {
+  background: white;
+  border-radius: 18px;
+  padding: 1.3rem;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(122, 158, 126, 0.14);
+}
+
+.admin-stat-card span {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+
+.admin-stat-card strong {
+  display: block;
+  font-size: 2rem;
+  color: var(--charcoal);
+  margin-top: 0.3rem;
+  line-height: 1;
+}
+
+.admin-section-card {
+  background: white;
+  border-radius: 22px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(122, 158, 126, 0.14);
+  margin-bottom: 1.5rem;
+}
+
+.admin-section-card h3 {
+  font-family: var(--font-cormorant), "Cormorant Garamond", serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--charcoal);
+  margin-bottom: 1rem;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 0.9rem;
+  border-bottom: 1px solid rgba(44, 44, 44, 0.08);
+  text-align: left;
+}
+
+.admin-table th {
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.admin-loading,
+.admin-error {
+  background: white;
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: var(--shadow);
+  color: var(--charcoal-soft);
+}
+
+.admin-error {
+  color: var(--terracotta);
+}
+
+/* =========================
+   ADMIN RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar {
+    position: relative;
+    height: auto;
+    padding: 1rem;
+  }
+
+  .admin-sidebar-brand {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .admin-sidebar-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 0.5rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .admin-sidebar-nav a {
+    white-space: nowrap;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .admin-logout-btn {
+    margin-top: 1rem;
+  }
+
+  .admin-main {
+    padding: 1.2rem;
+  }
+
+  .admin-page-header {
+    flex-direction: column;
+  }
+
+  .admin-page-title {
+    font-size: 1.9rem;
+  }
+
+  .admin-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .admin-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-section-card {
+    padding: 1rem;
+    overflow-x: auto;
+  }
+
+  .admin-table {
+    min-width: 620px;
+  }
+}
+/* =========================
+   APPOINTMENT ADMIN TABLE
+========================= */
+
+.admin-success {
+  background: rgba(122, 158, 126, 0.14);
+  color: var(--sage-dark);
+  border-radius: 14px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.appointments-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.appointments-table-card {
+  margin-bottom: 0;
+}
+
+.appointments-table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.appointments-table-header h3 {
+  margin-bottom: 0;
+}
+
+.appointments-table-header span {
+  font-size: 0.82rem;
+  color: var(--muted);
+  background: var(--cream);
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+}
+
+.appointments-table-wrap {
+  overflow-x: auto;
+}
+
+.appointments-table tbody tr {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.appointments-table tbody tr:hover {
+  background: rgba(122, 158, 126, 0.08);
+}
+
+.appointments-table tbody tr.selected-row {
+  background: rgba(122, 158, 126, 0.13);
+}
+
+.appointments-table td strong {
+  display: block;
+  color: var(--charcoal);
+  font-weight: 700;
+}
+
+.appointments-table td small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  margin-top: 0.2rem;
+}
+
+.appointment-status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 88px;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.appointment-status-pill.pending {
+  background: rgba(196, 113, 74, 0.12);
+  color: var(--terracotta);
+}
+
+.appointment-status-pill.confirmed {
+  background: rgba(122, 158, 126, 0.16);
+  color: var(--sage-dark);
+}
+
+.appointment-status-pill.completed {
+  background: rgba(47, 111, 94, 0.16);
+  color: #255a4b;
+}
+
+.appointment-status-pill.cancelled {
+  background: rgba(44, 44, 44, 0.1);
+  color: var(--charcoal-soft);
+}
+
+.table-view-btn {
+  border: none;
+  background: var(--cream);
+  color: var(--sage-dark);
+  border-radius: 999px;
+  padding: 0.45rem 0.85rem;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.table-view-btn:hover {
+  background: rgba(122, 158, 126, 0.18);
+}
+
+.appointment-details-card {
+  background: var(--white);
+  border-radius: 22px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(122, 158, 126, 0.14);
+  position: sticky;
+  top: 1.5rem;
+}
+
+.appointment-details-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(44, 44, 44, 0.08);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.appointment-details-header h3 {
+  font-family: var(--font-cormorant), "Cormorant Garamond", serif;
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--charcoal);
+  line-height: 1.1;
+}
+
+.appointment-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.8rem;
+}
+
+.appointment-detail-item {
+  background: var(--ivory);
+  border-radius: 14px;
+  padding: 0.85rem;
+}
+
+.appointment-detail-item span,
+.appointment-message-box span,
+.appointment-status-update label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.appointment-detail-item strong {
+  display: block;
+  color: var(--charcoal);
+  font-size: 0.92rem;
+  overflow-wrap: anywhere;
+}
+
+.appointment-message-box {
+  margin-top: 0.9rem;
+  background: var(--cream);
+  border-radius: 14px;
+  padding: 0.95rem;
+}
+
+.appointment-message-box p {
+  color: var(--charcoal-soft);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.appointment-status-update {
+  margin-top: 1rem;
+}
+
+.appointment-status-update select {
+  width: 100%;
+  border: 1px solid rgba(44, 44, 44, 0.15);
+  border-radius: 14px;
+  padding: 0.85rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  background: var(--white);
+  color: var(--charcoal);
+  outline: none;
+}
+
+.appointment-mail-link {
+  margin-top: 1rem;
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 0.8rem 1rem;
+  background: var(--terracotta);
+  color: var(--white);
+  font-weight: 700;
+}
+
+.appointment-mail-link:hover {
+  background: var(--terracotta-light);
+}
+
+/* Responsive appointment admin table */
+@media (max-width: 1100px) {
+  .appointments-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .appointment-details-card {
+    position: relative;
+    top: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .appointments-table {
+    min-width: 760px;
+  }
+
+  .appointment-details-card {
+    padding: 1.1rem;
+  }
+
+  .appointment-details-header {
+    flex-direction: column;
+  }
+}
+/* =========================
+   DASHBOARD POLISH
+========================= */
+
+.admin-insight-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.admin-insight-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.admin-insight-list div {
+  background: var(--ivory);
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.admin-insight-list span {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.admin-insight-list strong {
+  display: block;
+  font-size: 1rem;
+  color: var(--charcoal);
+}
+
+.admin-action-grid {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.admin-action-card {
+  display: block;
+  text-decoration: none;
+  background: var(--ivory);
+  border-radius: 14px;
+  padding: 1rem;
+  border: 1px solid rgba(122, 158, 126, 0.12);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.admin-action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.admin-action-card strong {
+  display: block;
+  color: var(--charcoal);
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.admin-action-card span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.admin-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.admin-section-header h3 {
+  margin-bottom: 0;
+}
+
+.admin-section-header a {
+  color: var(--sage-dark);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.journal-status-pill {
+  display: inline-flex;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(122, 158, 126, 0.14);
+  color: var(--sage-dark);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.admin-table td strong {
+  display: block;
+  color: var(--charcoal);
+  font-weight: 700;
+}
+
+.admin-table td small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  margin-top: 0.2rem;
+}
+
+@media (max-width: 900px) {
+  .admin-insight-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* =========================
+   FOOTER - UPDATED FINAL
+========================= */
+
+.site-footer {
+  background: #2f2114;
+  color: rgba(255, 255, 255, 0.88);
+  padding: 4rem 5% 1.5rem;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 3rem;
+  align-items: flex-start;
+}
+
+.footer-brand h3 {
+  font-family: var(--font-cormorant), "Cormorant Garamond", serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.footer-brand p {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.82);
+  margin-bottom: 1.5rem;
+}
+
+.footer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.footer-contact a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+  overflow-wrap: anywhere;
+}
+
+.footer-contact a:hover {
+  color: #d8c1a7;
+}
+
+.footer-column h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column li {
+  margin-bottom: 0.9rem;
+}
+
+.footer-column a {
+  color: rgba(255, 255, 255, 0.82);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.footer-column a:hover {
+  color: #d8c1a7;
+}
+
+.staff-access-link {
+  opacity: 0.72;
+  font-size: 0.9rem;
+}
+
+.staff-access-link:hover {
+  opacity: 1;
+  color: #d8c1a7;
+}
+
+.footer-bottom {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  text-align: center;
+}
+
+.footer-bottom p {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* =========================
+   FOOTER RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 600px) {
+  .site-footer {
+    padding: 3rem 5% 1.3rem;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem 1.5rem;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+
+  .footer-column:nth-of-type(1) {
+    grid-column: 1 / -1;
+  }
+
+  .footer-column:nth-of-type(2),
+  .footer-column:nth-of-type(3) {
+    grid-column: auto;
+  }
+
+  .footer-brand h3 {
+    font-size: 1.6rem;
+  }
+
+  .footer-brand p,
+  .footer-column a,
+  .footer-contact a {
+    font-size: 0.9rem;
+  }
+
+  .footer-column h4 {
+    font-size: 1rem;
+  }
+
+  .footer-column a {
+    font-size: 0.86rem;
+  }
+
+  .staff-access-link {
+    font-size: 0.84rem;
+    opacity: 0.68;
+  }
+
+  .footer-bottom {
+    text-align: left;
+  }
+}
