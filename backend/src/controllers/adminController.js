@@ -3,39 +3,33 @@ import Appointment from "../models/Appointment.js";
 
 export const getAdminStats = async (req, res) => {
   try {
-    const [
-      totalBlogs,
-      publishedBlogs,
-      draftBlogs,
-      featuredBlogs,
-      totalAppointments,
-      pendingAppointments,
-      confirmedAppointments,
-      completedAppointments,
-      cancelledAppointments,
-      recentAppointments,
-      recentBlogs,
-    ] = await Promise.all([
-      Blog.countDocuments(),
-      Blog.countDocuments({ status: "published" }),
-      Blog.countDocuments({ status: "draft" }),
-      Blog.countDocuments({ featured: true }),
+    const totalBlogs = await Blog.countDocuments();
+    const publishedBlogs = await Blog.countDocuments({ status: "published" });
+    const draftBlogs = await Blog.countDocuments({ status: "draft" });
+    const featuredBlogs = await Blog.countDocuments({ featured: true });
 
-      Appointment.countDocuments(),
-      Appointment.countDocuments({ status: "pending" }),
-      Appointment.countDocuments({ status: "confirmed" }),
-      Appointment.countDocuments({ status: "completed" }),
-      Appointment.countDocuments({ status: "cancelled" }),
+    const totalAppointments = await Appointment.countDocuments();
+    const pendingAppointments = await Appointment.countDocuments({
+      status: "pending",
+    });
+    const confirmedAppointments = await Appointment.countDocuments({
+      status: "confirmed",
+    });
+    const completedAppointments = await Appointment.countDocuments({
+      status: "completed",
+    });
+    const cancelledAppointments = await Appointment.countDocuments({
+      status: "cancelled",
+    });
 
-      Appointment.find()
-        .sort({ createdAt: -1 })
-        .limit(5),
+    const recentAppointments = await Appointment.find()
+      .sort({ createdAt: -1 })
+      .limit(5);
 
-      Blog.find()
-        .sort({ createdAt: -1 })
-        .limit(5)
-        .select("-content"),
-    ]);
+    const recentBlogs = await Blog.find()
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .select("-content");
 
     const mostRequestedServiceAgg = await Appointment.aggregate([
       {
@@ -71,16 +65,6 @@ export const getAdminStats = async (req, res) => {
       },
     ]);
 
-    const mostRequestedService =
-      mostRequestedServiceAgg.length > 0
-        ? mostRequestedServiceAgg[0]._id
-        : "—";
-
-    const mostUsedBlogCategory =
-      mostUsedBlogCategoryAgg.length > 0
-        ? mostUsedBlogCategoryAgg[0]._id
-        : "—";
-
     res.json({
       success: true,
 
@@ -95,8 +79,15 @@ export const getAdminStats = async (req, res) => {
       completedAppointments,
       cancelledAppointments,
 
-      mostRequestedService,
-      mostUsedBlogCategory,
+      mostRequestedService:
+        mostRequestedServiceAgg.length > 0
+          ? mostRequestedServiceAgg[0]._id
+          : "—",
+
+      mostUsedBlogCategory:
+        mostUsedBlogCategoryAgg.length > 0
+          ? mostUsedBlogCategoryAgg[0]._id
+          : "—",
 
       recentAppointments,
       recentBlogs,
