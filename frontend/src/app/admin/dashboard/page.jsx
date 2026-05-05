@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import AdminSidebar from "@/components/AdminSidebar";
+import AdminPageLoader from "@/components/AdminPageLoader";
 import { apiRequest } from "@/lib/api";
 
 export default function AdminDashboardPage() {
@@ -19,6 +20,7 @@ export default function AdminDashboardPage() {
         const data = await apiRequest("/admin/stats");
 
         setStats(data);
+
         setStatus({
           loading: false,
           error: "",
@@ -48,8 +50,8 @@ export default function AdminDashboardPage() {
               <div className="admin-page-label">Care Pulse Dashboard</div>
               <h1 className="admin-page-title">Clinic Activity Overview</h1>
               <p className="admin-page-subtitle">
-                Track content performance and appointment interest from one
-                place.
+                Track Care Journal content, appointment activity, and patient
+                interest from one place.
               </p>
             </div>
 
@@ -62,12 +64,16 @@ export default function AdminDashboardPage() {
           </div>
 
           {status.loading && (
-            <div className="admin-loading">Loading dashboard...</div>
+            <AdminPageLoader
+              title="Loading dashboard"
+              subtitle="Preparing clinic insights and recent activity"
+              type="dashboard"
+            />
           )}
 
           {status.error && <div className="admin-error">{status.error}</div>}
 
-          {stats && (
+          {stats && !status.loading && (
             <>
               <div className="admin-card-grid">
                 <div className="admin-stat-card">
@@ -109,6 +115,11 @@ export default function AdminDashboardPage() {
                   <span>Completed</span>
                   <strong>{stats.completedAppointments || 0}</strong>
                 </div>
+
+                <div className="admin-stat-card">
+                  <span>Cancelled</span>
+                  <strong>{stats.cancelledAppointments || 0}</strong>
+                </div>
               </div>
 
               <section className="admin-insight-grid">
@@ -127,8 +138,8 @@ export default function AdminDashboardPage() {
                     </div>
 
                     <div>
-                      <span>Cancelled Appointments</span>
-                      <strong>{stats.cancelledAppointments || 0}</strong>
+                      <span>Total Appointment Requests</span>
+                      <strong>{stats.totalAppointments || 0}</strong>
                     </div>
                   </div>
                 </div>
@@ -151,6 +162,11 @@ export default function AdminDashboardPage() {
                     >
                       <strong>View Appointments</strong>
                       <span>Manage patient requests</span>
+                    </Link>
+
+                    <Link href="/" className="admin-action-card" target="_blank">
+                      <strong>View Public Site</strong>
+                      <span>Open the live clinic website</span>
                     </Link>
                   </div>
                 </div>
@@ -177,11 +193,20 @@ export default function AdminDashboardPage() {
                       {stats.recentAppointments.map((appointment) => (
                         <tr key={appointment._id}>
                           <td>
-                            <strong>{appointment.fullName}</strong>
-                            <small>{appointment.email}</small>
+                            <strong>
+                              {appointment.fullName || "Unnamed Patient"}
+                            </strong>
+                            <small>
+                              {appointment.email || "No email provided"}
+                            </small>
                           </td>
-                          <td>{appointment.service}</td>
-                          <td>{appointment.preferredDate}</td>
+
+                          <td>{appointment.service || "Not provided"}</td>
+
+                          <td>
+                            {appointment.preferredDate || "Date not provided"}
+                          </td>
+
                           <td>
                             <span
                               className={`appointment-status-pill ${
@@ -224,12 +249,15 @@ export default function AdminDashboardPage() {
                             <strong>{blog.title}</strong>
                             <small>{blog.readTime || 1} min read</small>
                           </td>
-                          <td>{blog.category}</td>
+
+                          <td>{blog.category || "Family Health"}</td>
+
                           <td>
                             <span className="journal-status-pill">
-                              {blog.status}
+                              {blog.status || "draft"}
                             </span>
                           </td>
+
                           <td>{blog.featured ? "Yes" : "No"}</td>
                         </tr>
                       ))}

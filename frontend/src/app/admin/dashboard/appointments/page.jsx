@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import AdminSidebar from "@/components/AdminSidebar";
+import AdminPageLoader from "@/components/AdminPageLoader";
 import { apiRequest } from "@/lib/api";
 
 const statusOptions = ["pending", "confirmed", "completed", "cancelled"];
@@ -10,6 +11,7 @@ const statusOptions = ["pending", "confirmed", "completed", "cancelled"];
 export default function AdminAppointmentsPage() {
   const [appointments, setAppointments] = useState([]);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
+
   const [status, setStatus] = useState({
     loading: true,
     error: "",
@@ -31,8 +33,18 @@ export default function AdminAppointmentsPage() {
 
       setAppointments(appointmentList);
 
-      if (appointmentList.length > 0 && !selectedAppointment) {
-        setSelectedAppointment(appointmentList[0]);
+      if (appointmentList.length > 0) {
+        setSelectedAppointment((prev) => {
+          if (!prev) return appointmentList[0];
+
+          const stillExists = appointmentList.find(
+            (item) => item._id === prev._id
+          );
+
+          return stillExists || appointmentList[0];
+        });
+      } else {
+        setSelectedAppointment(null);
       }
 
       setStatus({
@@ -54,7 +66,6 @@ export default function AdminAppointmentsPage() {
 
   useEffect(() => {
     fetchAppointments();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleStatusChange = async (appointmentId, newStatus) => {
@@ -154,13 +165,19 @@ export default function AdminAppointmentsPage() {
           )}
 
           {status.loading ? (
-            <div className="admin-loading">Loading appointment requests...</div>
+            <AdminPageLoader
+              title="Loading appointments"
+              subtitle="Fetching recent patient appointment requests"
+              type="table"
+            />
           ) : appointments.length === 0 ? (
-            <div className="admin-section-card">
+            <div className="admin-empty-state">
+              <div className="admin-empty-state__icon">📅</div>
               <h3>No appointment requests yet</h3>
               <p>
                 Once patients submit the appointment form, their requests will
-                appear here.
+                appear here with service, intent, preferred date, time, and
+                booking status.
               </p>
             </div>
           ) : (
@@ -196,11 +213,15 @@ export default function AdminAppointmentsPage() {
                           onClick={() => setSelectedAppointment(appointment)}
                         >
                           <td>
-                            <strong>{appointment.fullName}</strong>
-                            <small>{appointment.email}</small>
+                            <strong>
+                              {appointment.fullName || "Unnamed Patient"}
+                            </strong>
+                            <small>
+                              {appointment.email || "No email provided"}
+                            </small>
                           </td>
 
-                          <td>{appointment.service}</td>
+                          <td>{appointment.service || "Not provided"}</td>
 
                           <td>{formatDate(appointment.preferredDate)}</td>
 
@@ -218,8 +239,8 @@ export default function AdminAppointmentsPage() {
                             <button
                               type="button"
                               className="table-view-btn"
-                              onClick={(e) => {
-                                e.stopPropagation();
+                              onClick={(event) => {
+                                event.stopPropagation();
                                 setSelectedAppointment(appointment);
                               }}
                             >
@@ -251,12 +272,16 @@ export default function AdminAppointmentsPage() {
                   <div className="appointment-detail-grid">
                     <div className="appointment-detail-item">
                       <span>Email</span>
-                      <strong>{selectedAppointment.email}</strong>
+                      <strong>
+                        {selectedAppointment.email || "Not provided"}
+                      </strong>
                     </div>
 
                     <div className="appointment-detail-item">
                       <span>Phone</span>
-                      <strong>{selectedAppointment.phone}</strong>
+                      <strong>
+                        {selectedAppointment.phone || "Not provided"}
+                      </strong>
                     </div>
 
                     <div className="appointment-detail-item">
@@ -268,7 +293,9 @@ export default function AdminAppointmentsPage() {
 
                     <div className="appointment-detail-item">
                       <span>Service Needed</span>
-                      <strong>{selectedAppointment.service}</strong>
+                      <strong>
+                        {selectedAppointment.service || "Not provided"}
+                      </strong>
                     </div>
 
                     <div className="appointment-detail-item">
@@ -294,7 +321,9 @@ export default function AdminAppointmentsPage() {
 
                     <div className="appointment-detail-item">
                       <span>Requested On</span>
-                      <strong>{formatDate(selectedAppointment.createdAt)}</strong>
+                      <strong>
+                        {formatDate(selectedAppointment.createdAt)}
+                      </strong>
                     </div>
                   </div>
 
@@ -308,13 +337,14 @@ export default function AdminAppointmentsPage() {
 
                   <div className="appointment-status-update">
                     <label htmlFor="appointment-status">Update Status</label>
+
                     <select
                       id="appointment-status"
                       value={selectedAppointment.status || "pending"}
-                      onChange={(e) =>
+                      onChange={(event) =>
                         handleStatusChange(
                           selectedAppointment._id,
-                          e.target.value
+                          event.target.value
                         )
                       }
                     >
@@ -326,12 +356,14 @@ export default function AdminAppointmentsPage() {
                     </select>
                   </div>
 
-                  <a
-                    className="appointment-mail-link"
-                    href={`mailto:${selectedAppointment.email}`}
-                  >
-                    Reply to Patient
-                  </a>
+                  {selectedAppointment.email && (
+                    <a
+                      className="appointment-mail-link"
+                      href={`mailto:${selectedAppointment.email}`}
+                    >
+                      Reply to Patient
+                    </a>
+                  )}
                 </aside>
               )}
             </div>

@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://vithara-care-clinic.onrender.com/api";
 
 const axiosClient = axios.create({
   baseURL: API_BASE_URL,
@@ -41,8 +42,6 @@ axiosClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Use this for most pages:
-// const data = await apiRequest("/admin/stats");
 export const apiRequest = async (url, options = {}) => {
   const response = await axiosClient({
     url,
