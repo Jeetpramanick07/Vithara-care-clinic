@@ -16,8 +16,8 @@ export default function Footer() {
           </p>
 
           <div className="footer-contact">
-            <a href="mailto:vidharthacareclinic@gmail.com">
-              ✉️ vidharthacareclinic@gmail.com
+            <a href="mailto:vitharacareclinic@gmail.com">
+              ✉️ vitharacareclinic@gmail.com
             </a>
           </div>
         </div>
