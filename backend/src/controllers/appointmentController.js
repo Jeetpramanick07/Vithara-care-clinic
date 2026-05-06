@@ -1,9 +1,5 @@
 import Appointment from "../models/Appointment.js";
 import getAppointmentIntent from "../utils/appointmentIntent.js";
-import {
-  sendAdminAppointmentEmail,
-  sendPatientConfirmationEmail,
-} from "../utils/sendEmail.js";
 
 // POST /api/appointments  (public)
 export const createAppointment = async (req, res) => {
@@ -56,43 +52,11 @@ export const createAppointment = async (req, res) => {
     status: "pending",
   });
 
-  const emailStatus = {
-    adminEmailSent: false,
-    patientEmailSent: false,
-    error: null,
-  };
-
-  try {
-    await sendAdminAppointmentEmail(appointment);
-    emailStatus.adminEmailSent = true;
-
-    await sendPatientConfirmationEmail(appointment);
-    emailStatus.patientEmailSent = true;
-
-    console.log("✅ Appointment emails sent successfully.");
-  } catch (emailError) {
-    console.error("❌ Appointment email failed");
-    console.error("Message:", emailError.message);
-    console.error("Code:", emailError.code);
-    console.error("Command:", emailError.command);
-    console.error("Response:", emailError.response);
-
-    emailStatus.error = {
-      message: emailError.message,
-      code: emailError.code || null,
-      command: emailError.command || null,
-      response: emailError.response || null,
-    };
-  }
-
   res.status(201).json({
     success: true,
     message:
-      emailStatus.adminEmailSent && emailStatus.patientEmailSent
-        ? "Thank you! Your appointment request has been submitted. Please check your email for confirmation."
-        : "Appointment request saved successfully, but email notification failed. Clinic admin can still view it in dashboard.",
+      "Thank you! Your appointment request has been submitted successfully.",
     appointment,
-    emailStatus,
   });
 };
 

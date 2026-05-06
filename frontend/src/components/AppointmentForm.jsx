@@ -1,69 +1,125 @@
 "use client";
 
 import { useState } from "react";
+import emailjs from "@emailjs/browser";
+import { apiRequest } from "@/lib/api";
 
-// Backend API base URL — set NEXT_PUBLIC_API_URL in .env.local
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+const initialFormData = {
+  fullName: "",
+  email: "",
+  phone: "",
+  patientType: "",
+  service: "",
+  preferredDate: "",
+  preferredTime: "",
+  message: "",
+};
 
 export default function AppointmentForm() {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    patientType: "",
-    service: "",
-    preferredDate: "",
-    preferredTime: "",
-    message: "",
-  });
+  const [formData, setFormData] = useState(initialFormData);
 
   const [status, setStatus] = useState({
     loading: false,
-    success: "",
-    error: "",
+    type: "",
+    message: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus({ loading: true, success: "", error: "" });
+  const sendEmailNotifications = async (appointmentData) => {
+    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+    const adminTemplateId =
+      process.env.NEXT_PUBLIC_EMAILJS_ADMIN_TEMPLATE_ID;
+    const patientTemplateId =
+      process.env.NEXT_PUBLIC_EMAILJS_PATIENT_TEMPLATE_ID;
+    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
+
+    if (!serviceId || !adminTemplateId || !patientTemplateId || !publicKey) {
+      throw new Error("EmailJS environment variables are missing.");
+    }
+
+    const templateParams = {
+      clinic_email: "vitharacareclinic@gmail.com",
+
+      full_name: appointmentData.fullName,
+      patient_email: appointmentData.email,
+      phone: appointmentData.phone,
+      patient_type: appointmentData.patientType || "Not specified",
+      service: appointmentData.service,
+      preferred_date: appointmentData.preferredDate,
+      preferred_time: appointmentData.preferredTime,
+      message:
+        appointmentData.message || "No additional message provided.",
+    };
+
+    await emailjs.send(serviceId, adminTemplateId, templateParams, publicKey);
+
+    await emailjs.send(serviceId, patientTemplateId, templateParams, publicKey);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    setStatus({
+      loading: true,
+      type: "",
+      message: "",
+    });
 
     try {
-      const response = await fetch(`${API_URL}/appointments`, {
+      await apiRequest("/appointments", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: formData,
       });
 
-      const result = await response.json();
+      try {
+        await sendEmailNotifications(formData);
 
-      if (!response.ok) {
-        throw new Error(result.message || "Something went wrong. Please try again.");
+        setStatus({
+          loading: false,
+          type: "success",
+          message:
+            "Appointment request submitted successfully. A confirmation email has been sent.",
+        });
+      } catch (emailError) {
+        console.error("EmailJS sending failed:", emailError);
+
+        setStatus({
+          loading: false,
+          type: "warning",
+          message:
+            "Appointment request saved successfully. Email notification could not be sent, but the clinic can still view your request.",
+        });
       }
 
+      setFormData(initialFormData);
+    } catch (error) {
       setStatus({
         loading: false,
-        success: result.message || "Thank you! Your appointment request has been submitted. Please check your email.",
-        error: "",
+        type: "error",
+        message:
+          error.response?.data?.message ||
+          error.message ||
+          "Unable to submit appointment request. Please try again.",
       });
-
-      setFormData({ fullName: "", email: "", phone: "", patientType: "", service: "", preferredDate: "", preferredTime: "", message: "" });
-    } catch (error) {
-      setStatus({ loading: false, success: "", error: error.message });
     }
   };
 
   return (
     <section className="appointment-section" id="appointment">
       <div className="section-header centered">
-        <div className="section-label">Book Appointment</div>
-        <h2 className="section-title">Schedule Your Family Visit</h2>
+        <div className="section-label">Book a Visit</div>
+        <h2 className="section-title">Request an Appointment</h2>
         <p className="section-sub">
-          Share a few details and our clinic team will contact you to confirm your appointment.
+          Share your preferred visit details and our care team will review your
+          request.
         </p>
       </div>
 
@@ -71,64 +127,139 @@ export default function AppointmentForm() {
         <div className="form-grid">
           <div className="form-group">
             <label htmlFor="fullName">Full Name *</label>
-            <input id="fullName" type="text" name="fullName" placeholder="Enter your full name" value={formData.fullName} onChange={handleChange} required />
+            <input
+              id="fullName"
+              name="fullName"
+              type="text"
+              value={formData.fullName}
+              onChange={handleChange}
+              placeholder="Enter your full name"
+              required
+            />
           </div>
 
           <div className="form-group">
             <label htmlFor="email">Email Address *</label>
-            <input id="email" type="email" name="email" placeholder="Enter your email address" value={formData.email} onChange={handleChange} required />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Enter your email address"
+              required
+            />
           </div>
 
           <div className="form-group">
             <label htmlFor="phone">Phone Number *</label>
-            <input id="phone" type="tel" name="phone" placeholder="Enter 10-digit phone number" value={formData.phone} onChange={handleChange} required />
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="Enter 10-digit phone number"
+              required
+            />
           </div>
 
           <div className="form-group">
             <label htmlFor="patientType">Patient Type</label>
-            <select id="patientType" name="patientType" value={formData.patientType} onChange={handleChange}>
+            <select
+              id="patientType"
+              name="patientType"
+              value={formData.patientType}
+              onChange={handleChange}
+            >
               <option value="">Select patient type</option>
               <option value="Child">Child</option>
               <option value="Adult">Adult</option>
-              <option value="Elderly Patient">Elderly Patient</option>
-              <option value="Family Consultation">Family Consultation</option>
+              <option value="Senior Citizen">Senior Citizen</option>
+              <option value="Family">Family</option>
             </select>
           </div>
 
           <div className="form-group">
             <label htmlFor="service">Service Needed *</label>
-            <select id="service" name="service" value={formData.service} onChange={handleChange} required>
-              <option value="">Select a service</option>
+            <select
+              id="service"
+              name="service"
+              value={formData.service}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select service</option>
               <option value="Family Consultation">Family Consultation</option>
-              <option value="Preventive Health Checkup">Preventive Health Checkup</option>
+              <option value="Preventive Health Checkup">
+                Preventive Health Checkup
+              </option>
               <option value="Pediatric Care">Pediatric Care</option>
-              <option value="Routine Wellness Support">Routine Wellness Support</option>
-              <option value="Follow-up Consultation">Follow-up Consultation</option>
+              <option value="Routine Wellness Support">
+                Routine Wellness Support
+              </option>
+              <option value="Follow-up Consultation">
+                Follow-up Consultation
+              </option>
             </select>
           </div>
 
           <div className="form-group">
             <label htmlFor="preferredDate">Preferred Date *</label>
-            <input id="preferredDate" type="date" name="preferredDate" value={formData.preferredDate} onChange={handleChange} required />
+            <input
+              id="preferredDate"
+              name="preferredDate"
+              type="date"
+              value={formData.preferredDate}
+              onChange={handleChange}
+              required
+            />
           </div>
 
           <div className="form-group">
             <label htmlFor="preferredTime">Preferred Time *</label>
-            <input id="preferredTime" type="time" name="preferredTime" value={formData.preferredTime} onChange={handleChange} required />
-          </div>
-
-          <div className="form-group form-full">
-            <label htmlFor="message">Additional Message</label>
-            <textarea id="message" name="message" placeholder="Tell us anything we should know before your visit" rows="5" value={formData.message} onChange={handleChange} />
+            <input
+              id="preferredTime"
+              name="preferredTime"
+              type="time"
+              value={formData.preferredTime}
+              onChange={handleChange}
+              required
+            />
           </div>
         </div>
 
-        <button type="submit" className="btn-primary appointment-submit" disabled={status.loading}>
-          {status.loading ? "Submitting..." : "Submit Appointment Request"}
+        <div className="form-group form-full">
+          <label htmlFor="message">Additional Message</label>
+          <textarea
+            id="message"
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            placeholder="Tell us anything we should know before your visit"
+            rows={5}
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="btn-primary appointment-submit"
+          disabled={status.loading}
+        >
+          {status.loading
+            ? "Submitting Appointment..."
+            : "Submit Appointment Request"}
         </button>
 
-        {status.success && <p className="form-success">{status.success}</p>}
-        {status.error && <p className="form-error">{status.error}</p>}
+        {status.message && (
+          <div className={`appointment-status ${status.type}`}>
+            {status.message}
+          </div>
+        )}
+
+        <p className="form-note">
+          Your request will be stored securely and reviewed by the clinic team.
+        </p>
       </form>
     </section>
   );
