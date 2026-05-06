@@ -18,28 +18,35 @@ export const createAppointment = async (req, res) => {
     message,
   } = req.body;
 
-  // Basic validation
-  if (!fullName || !email || !phone || !service || !preferredDate || !preferredTime) {
+  if (
+    !fullName ||
+    !email ||
+    !phone ||
+    !service ||
+    !preferredDate ||
+    !preferredTime
+  ) {
     return res.status(400).json({
       success: false,
       message: "Please fill all required fields.",
     });
   }
 
-  if (!/^[0-9]{10}$/.test(phone.replace(/\s/g, ""))) {
+  const cleanPhone = String(phone).replace(/\s/g, "");
+
+  if (!/^[0-9]{10}$/.test(cleanPhone)) {
     return res.status(400).json({
       success: false,
       message: "Please enter a valid 10-digit phone number.",
     });
   }
 
-  // Auto-assign intent
   const intent = getAppointmentIntent(service);
 
   const appointment = await Appointment.create({
     fullName,
     email,
-    phone,
+    phone: cleanPhone,
     patientType: patientType || "",
     service,
     preferredDate,
@@ -49,20 +56,43 @@ export const createAppointment = async (req, res) => {
     status: "pending",
   });
 
-  // Send emails — don't block response if email fails
+  const emailStatus = {
+    adminEmailSent: false,
+    patientEmailSent: false,
+    error: null,
+  };
+
   try {
     await sendAdminAppointmentEmail(appointment);
+    emailStatus.adminEmailSent = true;
+
     await sendPatientConfirmationEmail(appointment);
+    emailStatus.patientEmailSent = true;
+
+    console.log("✅ Appointment emails sent successfully.");
   } catch (emailError) {
-    console.error("Email sending failed:", emailError.message);
-    // Continue — appointment is already saved
+    console.error("❌ Appointment email failed");
+    console.error("Message:", emailError.message);
+    console.error("Code:", emailError.code);
+    console.error("Command:", emailError.command);
+    console.error("Response:", emailError.response);
+
+    emailStatus.error = {
+      message: emailError.message,
+      code: emailError.code || null,
+      command: emailError.command || null,
+      response: emailError.response || null,
+    };
   }
 
   res.status(201).json({
     success: true,
     message:
-      "Thank you! Your appointment request has been submitted. Please check your email for confirmation.",
+      emailStatus.adminEmailSent && emailStatus.patientEmailSent
+        ? "Thank you! Your appointment request has been submitted. Please check your email for confirmation."
+        : "Appointment request saved successfully, but email notification failed. Clinic admin can still view it in dashboard.",
     appointment,
+    emailStatus,
   });
 };
 
@@ -71,10 +101,12 @@ export const getAppointments = async (req, res) => {
   const { status, service, limit = 50, page = 1 } = req.query;
 
   const filter = {};
+
   if (status) filter.status = status;
   if (service) filter.service = service;
 
   const total = await Appointment.countDocuments(filter);
+
   const appointments = await Appointment.find(filter)
     .sort({ createdAt: -1 })
     .limit(Number(limit))
@@ -93,6 +125,7 @@ export const updateAppointmentStatus = async (req, res) => {
   const { status } = req.body;
 
   const validStatuses = ["pending", "confirmed", "completed", "cancelled"];
+
   if (!validStatuses.includes(status)) {
     return res.status(400).json({
       success: false,
