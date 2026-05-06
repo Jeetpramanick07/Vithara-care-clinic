@@ -28,19 +28,26 @@ const createTransporter = () => {
   const { gmailUser, gmailAppPassword } = getEmailConfig();
 
   return nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    requireTLS: true,
+    connectionTimeout: 20000,
+    greetingTimeout: 20000,
+    socketTimeout: 30000,
     auth: {
       user: gmailUser,
       pass: gmailAppPassword,
+    },
+    tls: {
+      rejectUnauthorized: false,
     },
   });
 };
 
 export const verifyEmailService = async () => {
   const transporter = createTransporter();
-
   await transporter.verify();
-
   console.log("✅ Gmail SMTP is ready.");
 };
 
@@ -113,7 +120,6 @@ export const sendAdminAppointmentEmail = async (appointment) => {
   });
 
   console.log("✅ Admin appointment email sent:", info.messageId);
-
   return info;
 };
 
@@ -140,15 +146,9 @@ export const sendPatientConfirmationEmail = async (appointment) => {
           </p>
 
           <div style="background:#f2ede4;padding:20px;border-radius:12px;margin:24px 0;">
-            <p style="margin:0 0 8px;">
-              <strong>Requested Service:</strong> ${service}
-            </p>
-            <p style="margin:0 0 8px;">
-              <strong>Preferred Date:</strong> ${preferredDate}
-            </p>
-            <p style="margin:0;">
-              <strong>Preferred Time:</strong> ${preferredTime}
-            </p>
+            <p style="margin:0 0 8px;"><strong>Requested Service:</strong> ${service}</p>
+            <p style="margin:0 0 8px;"><strong>Preferred Date:</strong> ${preferredDate}</p>
+            <p style="margin:0;"><strong>Preferred Time:</strong> ${preferredTime}</p>
           </div>
 
           <p style="color:#555;">
@@ -166,6 +166,5 @@ export const sendPatientConfirmationEmail = async (appointment) => {
   });
 
   console.log("✅ Patient confirmation email sent:", info.messageId);
-
   return info;
 };
